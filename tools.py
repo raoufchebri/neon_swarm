@@ -20,7 +20,8 @@ Then, you can import and use the functions provided in this module to interact w
 import os
 import requests
 import logging
-
+import psycopg2
+from psycopg2 import sql
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -339,4 +340,86 @@ def get_current_user_info():
         return filtered_info
     except Exception as e:
         logger.error(f"An error occurred while getting user info: {str(e)}")
+        raise
+
+def execute_sql(connection_uri, sql_query):
+    """
+    Execute SQL on a Neon project.
+
+    Args:
+        connection_uri (str): The connection URI for the Neon project.
+        sql (str): The SQL query to execute.
+
+    Returns:
+        dict: A dictionary containing the result of the SQL execution.
+    """
+
+    try:
+        conn = psycopg2.connect(connection_uri, sslmode='require')
+        cur = conn.cursor()
+     
+        # Execute the query
+        cur.execute(sql.SQL(sql_query))
+        
+        # If the query is a SELECT statement, fetch the results
+        if sql_query.strip().lower().startswith("select"):
+            results = cur.fetchall()
+        else:
+            # Commit the transaction for non-SELECT queries
+            conn.commit()
+            results = []
+
+        # Close the cursor and connection
+        cur.close()
+        
+        return results
+    except Exception as e:
+        logger.error(f"An error occurred while executing SQL query: {str(e)}")
+        raise
+
+def fetch_database_schema(connection_uri):
+    """
+    Fetch the schema of the database.
+
+    Args:
+        neon_api_key (str): The Neon API key for authentication.
+        database_url (str): The connection URL for the PostgreSQL database.
+
+    Returns:
+        list: A list of dictionaries containing table names and their column information.
+
+    Raises:
+        Exception: If there's an error connecting to the database or executing the query.
+    """
+    schema_query = """
+    SELECT 
+        table_name, 
+        column_name, 
+        data_type, 
+        is_nullable
+    FROM 
+        information_schema.columns
+    WHERE 
+        table_schema = 'public'
+    ORDER BY 
+        table_name, ordinal_position;
+    """
+
+    try:
+        results = execute_sql(connection_uri, schema_query)
+        
+        schema = {}
+        for row in results:
+            table_name, column_name, data_type, is_nullable = row
+            if table_name not in schema:
+                schema[table_name] = []
+            schema[table_name].append({
+                "column_name": column_name,
+                "data_type": data_type,
+                "is_nullable": is_nullable
+            })
+
+        return [{"table_name": table, "columns": columns} for table, columns in schema.items()]
+    except Exception as e:
+        logger.error(f"An error occurred while fetching database schema: {str(e)}")
         raise
