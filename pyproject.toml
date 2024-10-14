@@ -23,6 +23,11 @@ dependencies = [
     "python-dotenv"
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pytest",
+]
+
 [project.urls]
 "Homepage" = "https://github.com/raoufchebri/neon_swarm"
 "Bug Tracker" = "https://github.com/raoufchebri/neon_swarm/issues"
