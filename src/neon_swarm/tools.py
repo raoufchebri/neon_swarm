@@ -49,10 +49,8 @@ def handle_response(response):
     except requests.exceptions.HTTPError as e:
         logger.error(f"HTTPError: {e}")
         logger.error(f"Response status code: {response.status_code}")
-        logger.error(f"Response content: {response.content}")
         return {"error": f"HTTPError: {e}"}
     logger.info(f"Response status code: {response.status_code}")
-    logger.info(f"Response content: {response.content}")
     return response.json()
 
 def list_projects():
