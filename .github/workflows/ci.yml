@@ -28,7 +28,7 @@ jobs:
         NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: |
-        pytest
+        pytest tests/
 
   build:
     needs: test
