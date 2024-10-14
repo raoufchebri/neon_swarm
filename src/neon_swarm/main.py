@@ -1,6 +1,6 @@
-from Swarm import Agent
+from swarm import Agent
 from .agents import neon_agent, sql_executor
-from src.neon_swarm.tools import get_current_user_info, list_projects
+from .tools import get_current_user_info, list_projects
 
 def neon_agent_init() -> tuple[Agent, dict]:
     user_info = get_current_user_info()
@@ -14,11 +14,4 @@ def neon_agent_init() -> tuple[Agent, dict]:
         """,
     }
     return neon_agent, context_variables
-
-
-def sql_executor_init(connection_uri: str) -> tuple[Agent, dict]:
-    context_variables = {
-        "connection_uri": connection_uri
-    }
-    return sql_executor, context_variables
 
