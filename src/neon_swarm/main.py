@@ -1,6 +1,6 @@
-from swarm import Agent
+from Swarm import Agent
 from .agents import neon_agent, sql_executor
-from neon_swarm.src.neon_swarm.tools import get_current_user_info, list_projects
+from src.neon_swarm.tools import get_current_user_info, list_projects
 
 def neon_agent_init() -> tuple[Agent, dict]:
     user_info = get_current_user_info()

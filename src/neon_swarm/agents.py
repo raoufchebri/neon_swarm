@@ -1,5 +1,5 @@
-from swarm import Agent
-from neon_swarm.src.neon_swarm.tools import get_current_user_info, list_projects, execute_sql, fetch_database_schema, list_projects_with_details, get_project, create_project, delete_project, get_connection_uri, create_project_branch, list_project_branches, get_project_branch, delete_project_branch
+from Swarm import Agent
+from src.neon_swarm.tools import get_current_user_info, list_projects, execute_sql, fetch_database_schema, list_projects_with_details, get_project, create_project, delete_project, get_connection_uri, create_project_branch, list_project_branches, get_project_branch, delete_project_branch
 
 def triage_instructions(context_variables):
     user_info = context_variables.get("user_info", None)
