@@ -50,8 +50,3 @@ jobs:
         NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: python -m build
-    - name: Archive production artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: my-artifact
-        path: dist
